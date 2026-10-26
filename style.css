@@ -10,3 +10,10 @@ nav.menu button[aria-current="page"]:after{content:"";position:absolute;left:18p
 body[data-theme=dark] nav.menu button[aria-current="page"]{background:#7567f0!important;border-color:#958aff!important;color:#fff!important;box-shadow:0 4px 15px #7567f055}
 nav.menu button:not([aria-current="page"]):hover{background:var(--bg);color:var(--accent);transform:none}
 @media(max-width:720px){nav.menu{padding:5px;gap:3px}nav.menu button{padding:9px 12px;min-height:42px}}
+/* Roomier navigation and unmistakable selected state */
+nav.menu{gap:12px;padding:10px 12px;margin-bottom:22px;align-items:center}
+nav.menu button{margin:0;padding:12px 20px;min-height:48px;border:1px solid var(--line);background:var(--bg);border-radius:13px;white-space:nowrap}
+nav.menu button[aria-current="page"],nav.menu button.active{background:#6755f5!important;border-color:#6755f5!important;color:#fff!important;font-weight:750;box-shadow:0 5px 14px #6755f566,0 0 0 3px #6755f526;transform:translateY(-2px)}
+body[data-theme=dark] nav.menu button[aria-current="page"],body[data-theme=dark] nav.menu button.active{background:#806fff!important;border-color:#a293ff!important;box-shadow:0 5px 16px #806fff66,0 0 0 3px #a293ff30}
+nav.menu button[aria-current="page"]:after,nav.menu button.active:after{left:22px;right:22px;bottom:5px;height:3px;background:#fff}
+@media(max-width:720px){nav.menu{gap:9px;padding:8px;margin-bottom:16px}nav.menu button{padding:11px 16px;min-height:46px}}
