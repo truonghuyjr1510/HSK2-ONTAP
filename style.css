@@ -17,3 +17,4 @@ nav.menu button[aria-current="page"],nav.menu button.active{background:#6755f5!i
 body[data-theme=dark] nav.menu button[aria-current="page"],body[data-theme=dark] nav.menu button.active{background:#806fff!important;border-color:#a293ff!important;box-shadow:0 5px 16px #806fff66,0 0 0 3px #a293ff30}
 nav.menu button[aria-current="page"]:after,nav.menu button.active:after{left:22px;right:22px;bottom:5px;height:3px;background:#fff}
 @media(max-width:720px){nav.menu{gap:9px;padding:8px;margin-bottom:16px}nav.menu button{padding:11px 16px;min-height:46px}}
+.step-label{font-size:13px;font-weight:700;color:var(--muted);margin:0 auto 6px}.progress-track{height:7px;max-width:520px;margin:0 auto 22px;background:var(--bg);border-radius:10px;overflow:hidden}.progress-track i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#5c70ee,#9a69ee);transition:width .2s}.feedback{font-weight:700}
