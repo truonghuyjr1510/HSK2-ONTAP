@@ -1,1 +1,35 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Học từ vựng HSK</title><link rel="stylesheet" href="style.css?v=9"></head><body><header><b>学 HSK mỗi ngày</b><span>CHINH PHỤC HSK</span></header><main><h1 class="page-title">Ôn HSK 2</h1><section id="stats" class="stats"></section><nav id="tabs"></nav><section id="content" class="panel"></section><section class="settings"><label><input id="goal" type="hidden" value="10"></label><button id="export-progress">Xuất tiến độ</button><label>Nhập tiến độ <input id="import-progress" type="file" accept="application/json"></label></section><p id="notice" role="status"></p><footer>Tiến độ và danh sách từ được lưu trên trình duyệt này. Phát âm sử dụng giọng tiếng Trung trên thiết bị.</footer></main><script src="words-data.js?v=10"></script><script src="app.js?v=10"></script></body></html>
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f5ff">
+  <title>Ôn HSK · Học từ vựng tiếng Trung</title>
+  <link rel="stylesheet" href="style.css?v=12">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">学</span><span><strong>Ôn HSK</strong><small>Học từ vựng mỗi ngày</small></span></div>
+    <span class="top-note">HSK 2.0 · Luyện tập theo nhịp của bạn</span>
+  </header>
+  <main class="workspace">
+    <aside class="sidebar" aria-label="Điều hướng và tiến độ">
+      <p class="sidebar-label">KHÁM PHÁ</p>
+      <nav id="tabs" class="menu" aria-label="Menu chính"></nav>
+      <div class="sidebar-progress"><p class="sidebar-label">TIẾN ĐỘ CỦA BẠN</p><section id="stats" class="stats" aria-live="polite"></section></div>
+    </aside>
+    <div class="main-column">
+      <div class="page-heading"><div><p class="eyebrow">TIẾNG TRUNG · HSK 2</p><h1 id="page-title">Chào mừng trở lại</h1><p id="page-subtitle">Chọn một cách học phù hợp để bắt đầu.</p></div><span class="page-badge">Mỗi ngày một chút ✦</span></div>
+      <section id="content" class="panel"></section>
+      <section class="settings" aria-label="Sao lưu tiến độ">
+        <button id="export-progress">↓ Xuất tiến độ</button>
+        <label class="import-label">↑ Nhập tiến độ <input id="import-progress" type="file" accept="application/json"></label>
+      </section>
+      <p id="notice" role="status" aria-live="polite"></p>
+      <footer>Tiến độ được lưu trên trình duyệt này. Phát âm dùng giọng tiếng Trung của thiết bị.</footer>
+    </div>
+  </main>
+  <script src="words-data.js?v=10"></script>
+  <script src="app.js?v=12"></script>
+</body>
+</html>
