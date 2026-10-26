@@ -2,3 +2,11 @@
 .flash-pinyin{font-size:clamp(54px,10vw,86px);margin:54px 0 22px;color:var(--accent);font-weight:700;letter-spacing:.02em}
 .review-note{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--mint);color:#248b74;font-size:13px}
 .answer-audio{display:inline-flex;align-items:center;margin:0 0 0 8px;padding:5px 10px;border-radius:9px;background:var(--mint);border-color:transparent;color:#248b74;font-size:13px}.answer-audio:hover{background:var(--accent);color:white}
+/* Clear, persistent current-section indicator in the main menu */
+nav.menu{padding:7px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 14px #27304a0a;gap:5px}
+nav.menu button{position:relative;min-height:44px;padding:10px 16px;border-radius:11px;font-weight:600;transition:all .18s ease}
+nav.menu button[aria-current="page"]{background:#6354df!important;border:1px solid #6354df!important;color:#fff!important;font-weight:750;box-shadow:0 4px 12px #6354df55;transform:translateY(-1px)}
+nav.menu button[aria-current="page"]:after{content:"";position:absolute;left:18px;right:18px;bottom:4px;height:2px;border-radius:2px;background:#fff9}
+body[data-theme=dark] nav.menu button[aria-current="page"]{background:#7567f0!important;border-color:#958aff!important;color:#fff!important;box-shadow:0 4px 15px #7567f055}
+nav.menu button:not([aria-current="page"]):hover{background:var(--bg);color:var(--accent);transform:none}
+@media(max-width:720px){nav.menu{padding:5px;gap:3px}nav.menu button{padding:9px 12px;min-height:42px}}
