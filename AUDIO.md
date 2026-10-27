@@ -26,7 +26,7 @@ python scripts/generate_azure_audio.py --dry-run
 python scripts/generate_azure_audio.py --dry-run --indices 46,47
 ```
 
-Để tạo âm thanh, đặt `AZURE_SPEECH_KEY` và `AZURE_SPEECH_REGION` trong môi trường riêng, rồi chạy:
+Để tạo âm thanh, đặt `HSK_SPEECH_KEY` trong phần bí mật của môi trường và `HSK_SPEECH_REGION` theo vùng của tài nguyên Speech (ví dụ `southeastasia`), rồi chạy:
 
 ```sh
 python scripts/generate_azure_audio.py --voice zh-CN-XiaoxiaoNeural --output-dir audio-azure-c

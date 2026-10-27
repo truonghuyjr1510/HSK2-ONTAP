@@ -1,7 +1,7 @@
 """Generate HSK audio with the official Azure AI Speech REST API.
 
 Install: pip install pypinyin
-Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION in the shell running this script.
+Set HSK_SPEECH_KEY and HSK_SPEECH_REGION in the shell running this script.
 Dry run first: python scripts/generate_azure_audio.py --dry-run --indices 46,47
 """
 
@@ -151,11 +151,12 @@ def main():
     if args.dry_run:
         return
 
-    key, region = os.getenv("AZURE_SPEECH_KEY"), os.getenv("AZURE_SPEECH_REGION")
+    key = os.getenv("HSK_SPEECH_KEY") or os.getenv("AZURE_SPEECH_KEY")
+    region = os.getenv("HSK_SPEECH_REGION") or os.getenv("AZURE_SPEECH_REGION")
     if not key or not region:
-        parser.error("Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION before generating audio")
+        parser.error("Set HSK_SPEECH_KEY and HSK_SPEECH_REGION before generating audio")
     if not re.fullmatch(r"[a-z0-9-]+", region):
-        parser.error("AZURE_SPEECH_REGION has an invalid format")
+        parser.error("HSK_SPEECH_REGION has an invalid format")
     output_dir = args.output_dir if args.output_dir.is_absolute() else ROOT / args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     for number, (filename, text, pronunciation) in enumerate(jobs, start=1):
