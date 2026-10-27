@@ -2,3 +2,7 @@
 .hero small{color:#f5edff!important}.import-label{position:relative;min-height:44px;padding:10px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-weight:650;cursor:pointer}.import-label:hover{border-color:var(--accent);color:var(--accent)}.import-label input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}.import-label:focus-within{outline:3px solid var(--accent-soft);outline-offset:2px}
 @media(max-width:680px){.toolbar{display:grid;grid-template-columns:1fr;justify-items:stretch;gap:9px}.toolbar label{width:100%}.toolbar label:first-child select{flex:1;min-width:0;max-width:100%}}
 .audio-icon{display:inline-grid;place-items:center;width:84px;height:84px;margin:6px 0 10px;padding:0;border:1px solid var(--line);border-radius:23px;background:var(--accent-soft);font-size:47px;line-height:1;color:var(--accent);transition:transform .15s,box-shadow .15s}.audio-icon:hover{transform:translateY(-2px);box-shadow:0 8px 18px #6f4ee72b;border-color:var(--accent)}.audio-icon:active{transform:scale(.96)}
+.voice-picker{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.voice-picker select{max-width:min(240px,100%);min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.voice-picker select:disabled{opacity:.75}
+.audio-icon[data-playing="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}

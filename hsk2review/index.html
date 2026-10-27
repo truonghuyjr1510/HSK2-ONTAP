@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f5ff">
   <title>Ôn HSK · Học từ vựng tiếng Trung</title>
-  <link rel="stylesheet" href="../style.css?v=14">
+  <link rel="stylesheet" href="../style.css?v=15">
 </head>
 <body>
   <header class="topbar">
@@ -21,15 +21,16 @@
     <div class="main-column">
       <div class="page-heading"><div><p class="eyebrow">TIẾNG TRUNG · HSK 2</p><h1 id="page-title">Chào mừng trở lại</h1><p id="page-subtitle">Chọn một cách học phù hợp để bắt đầu.</p></div><span class="page-badge">Mỗi ngày một chút ✦</span></div>
       <section id="content" class="panel"></section>
-      <section class="settings" aria-label="Sao lưu tiến độ">
+      <section class="settings" aria-label="Giọng đọc và sao lưu tiến độ">
+        <label class="voice-picker" for="voice-select">Giọng Quan thoại <select id="voice-select" aria-label="Chọn giọng Quan thoại"></select></label>
         <button id="export-progress">↓ Xuất tiến độ</button>
         <label class="import-label">↑ Nhập tiến độ <input id="import-progress" type="file" accept="application/json"></label>
       </section>
       <p id="notice" role="status" aria-live="polite"></p>
-      <footer>Tiến độ được lưu trên trình duyệt này. Phát âm dùng giọng tiếng Trung của thiết bị.</footer>
+      <footer>Tiến độ được lưu trên trình duyệt này. Giọng đọc phụ thuộc vào các giọng Quan thoại có trên thiết bị.</footer>
     </div>
   </main>
   <script src="../words-data.js?v=10"></script>
-  <script src="../app.js?v=14"></script>
+  <script src="../app.js?v=15"></script>
 </body>
 </html>
