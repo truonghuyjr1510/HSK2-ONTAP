@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f5ff">
   <title>Ôn HSK · Học từ vựng tiếng Trung</title>
-  <link rel="stylesheet" href="../style.css?v=16">
+  <link rel="stylesheet" href="../style.css?v=17">
 </head>
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark" aria-hidden="true">学</span><span><strong>Ôn HSK</strong><small>Học từ vựng mỗi ngày</small></span></div>
     <span class="top-note">HSK 2.0 · Luyện tập theo nhịp của bạn</span>
+    <label class="voice-control" for="voice-select"><span>Giọng đọc</span><select id="voice-select" aria-label="Chọn giọng đọc"><option value="c">Nữ · mẫu C</option><option value="d">Nam · mẫu D</option></select></label>
   </header>
   <main class="workspace">
     <aside class="sidebar" aria-label="Điều hướng và tiến độ">
@@ -26,11 +27,11 @@
         <label class="import-label">↑ Nhập tiến độ <input id="import-progress" type="file" accept="application/json"></label>
       </section>
       <p id="notice" role="status" aria-live="polite"></p>
-      <footer>Tiến độ được lưu trên trình duyệt này. Âm thanh Quan thoại dùng chung trên mọi thiết bị.</footer>
+      <footer>Tiến độ và lựa chọn giọng đọc được lưu trên trình duyệt này. Âm thanh Quan thoại dùng chung trên mọi thiết bị.</footer>
     </div>
   </main>
   <script src="../words-data.js?v=11"></script>
   <script src="../answer-aliases.js?v=1"></script>
-  <script src="../app.js?v=20"></script>
+  <script src="../app.js?v=21"></script>
 </body>
 </html>
