@@ -32,7 +32,7 @@ function speak(text,slow=false,button=null){
   if(!file)return msg('Chưa có âm thanh cho từ này. Hãy cập nhật bộ âm thanh.');
   stopSpeech();
   const audio=new Audio(new URL(`${file}?v=${AUDIO_REV}`,AUDIO_BASE).href);
-  audio.playbackRate=slow?.8:1;
+  audio.playbackRate=slow?.75:.9;
   audio.preservesPitch=true;
   playingAudio=audio;
   if(button){

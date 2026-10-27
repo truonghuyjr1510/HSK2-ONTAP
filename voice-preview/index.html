@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nghe thử giọng Quan thoại · Ôn HSK</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#292342;background:#f7f5fc}
+    *{box-sizing:border-box}
+    body{max-width:1040px;margin:0 auto;padding:30px 18px 60px}
+    a{color:#6744d6;text-decoration:none;font-weight:650}
+    a:hover{text-decoration:underline}
+    .intro{background:#fff;border:1px solid #e8e2f3;border-radius:24px;padding:28px;margin:22px 0;box-shadow:0 12px 32px #34275c0b}
+    .eyebrow{color:#6744d6;font-size:12px;font-weight:800;letter-spacing:1.3px;margin:0 0 8px}
+    h1{font-size:clamp(26px,4vw,38px);line-height:1.18;margin:0 0 12px}
+    p{line-height:1.6;color:#625976}
+    .sample{background:#f0ebff;border-radius:15px;padding:12px 16px;margin-top:18px}
+    .sample p{margin:4px 0}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    article{background:#fff;border:1px solid #e8e2f3;border-radius:20px;padding:22px;box-shadow:0 10px 28px #34275c0a}
+    article h2{font-size:19px;margin:0 0 5px}
+    article p{font-size:14px;margin:0 0 16px}
+    .tag{display:inline-block;background:#eee9ff;color:#6744d6;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:750;margin-bottom:12px}
+    label{display:block;color:#292342;font-size:14px;font-weight:650;margin-top:14px}
+    audio{display:block;width:100%;margin-top:6px}
+    @media(max-width:650px){body{padding:18px 12px 40px}.intro{padding:21px}.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <a href="../hsk2review/">← Quay lại app Ôn HSK</a>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">BẢN NGHE THỬ · QUAN THOẠI</p>
+      <h1>Giọng nào dễ nghe và tự nhiên hơn?</h1>
+      <p>Bốn cách đọc cùng một từ và một câu. Bạn có thể so tốc độ và ngữ điệu trước khi chọn giọng cho toàn bộ bài học. Các mẫu chỉ phát khi bạn nhấn nút nghe.</p>
+      <div class="sample"><p><strong>Từ:</strong> péngyou — bạn bè</p><p><strong>Câu:</strong> Jīntiān wǒ hěn gāoxìng! Wǒ hé péngyou yìqǐ xuéxí Hànyǔ. — Hôm nay tôi rất vui! Tôi học tiếng Trung cùng bạn bè.</p></div>
+    </section>
+    <section class="grid" aria-label="So sánh giọng đọc">
+      <article><span class="tag">Mẫu A</span><h2>Giọng trước đây</h2><p>Giọng nữ gốc, tốc độ cũ để đối chiếu.</p><label>Từ vựng<audio controls preload="none" src="a-word.mp3"></audio></label><label>Câu ví dụ<audio controls preload="none" src="a-sentence.mp3"></audio></label></article>
+      <article><span class="tag">Mẫu B</span><h2>Cùng giọng, chậm hơn</h2><p>Giọng nữ quen thuộc, tạo âm thanh với nhịp chậm hơn.</p><label>Từ vựng<audio controls preload="none" src="b-word.mp3"></audio></label><label>Câu ví dụ<audio controls preload="none" src="b-sentence.mp3"></audio></label></article>
+      <article><span class="tag">Mẫu C</span><h2>Giọng nữ khác</h2><p>Một giọng Quan thoại nữ khác, nhịp đọc dịu hơn.</p><label>Từ vựng<audio controls preload="none" src="c-word.mp3"></audio></label><label>Câu ví dụ<audio controls preload="none" src="c-sentence.mp3"></audio></label></article>
+      <article><span class="tag">Mẫu D</span><h2>Giọng nam</h2><p>Giọng Quan thoại nam với nhịp đọc chậm hơn.</p><label>Từ vựng<audio controls preload="none" src="d-word.mp3"></audio></label><label>Câu ví dụ<audio controls preload="none" src="d-sentence.mp3"></audio></label></article>
+    </section>
+  </main>
+  <script>
+    const samples=[...document.querySelectorAll('audio')];
+    for(const sample of samples)sample.addEventListener('play',()=>{
+      for(const other of samples)if(other!==sample)other.pause();
+    });
+  </script>
+</body>
+</html>
