@@ -2,42 +2,48 @@ const $=id=>document.getElementById(id),STORE='hsk-study-v2',today=()=>new Date(
 let words=window.INITIAL_WORDS.map(x=>({...x})),state=loadState(),tab='Trang chính',mode='Nghe',topic='Tất cả',index=0,flipped=false,answered=false,quiz=[],qpos=0,quizAnswered=[],quizCorrect=[];
 function loadState(){try{let s=JSON.parse(localStorage.getItem(STORE));if(s?.records&&s.days)return s}catch{}return{goal:10,records:{},days:{}}}function save(){localStorage.setItem(STORE,JSON.stringify(state))}function log(w,ok){let old=state.records[w.hanzi]||{level:0},level=ok?Math.min(6,old.level+1):0;state.records[w.hanzi]={level,due:Date.now()+(ok?[0,1,3,7,14,30,60][level]*86400000:60000)};state.days[today()]=[...new Set([...(state.days[today()]||[]),w.hanzi])];save();stats()}
 function stats(){let a=words.filter(w=>state.records[w.hanzi]).length,b=words.filter(w=>state.records[w.hanzi]?.due<=Date.now()).length;$('stats').innerHTML=`<div><strong>${a}/${words.length}</strong>Từ đã học</div><div><strong>${b}</strong>Từ cần ôn</div><div><strong>${(state.days[today()]||[]).length}</strong>Đã luyện hôm nay</div>`}
-const VOICE_STORE='hsk-mandarin-voice';
-let playingButton=null,playingLabel='',playingUtterance=null;
-function voiceKey(voice){return voice.voiceURI||`${voice.name}|${voice.lang}`}
-function mandarinVoices(){
-  if(!('speechSynthesis' in window))return [];
-  const score=voice=>{
-    const lang=voice.lang.toLowerCase();
-    const region=/(?:^|[-_])(cn|sg|tw)(?:$|[-_])/i.exec(lang)?.[1]?.toLowerCase();
-    return (region==='cn'?100:region==='sg'?80:region==='tw'?70:50)+(/natural|neural/i.test(voice.name)?20:0)+(/google/i.test(voice.name)?5:0);
-  };
-  return speechSynthesis.getVoices().filter(voice=>/^(zh|cmn)(?:[-_]|$)/i.test(voice.lang)&&!/(?:^|[-_])(hk|mo)(?:$|[-_])/i.test(voice.lang)).sort((a,b)=>score(b)-score(a));
-}
-function refreshVoices(){
-  const select=$('voice-select'),voices=mandarinVoices(),saved=localStorage.getItem(VOICE_STORE)||'';
-  select.replaceChildren(new Option(voices.length?'Tự động · Quan thoại':'Chưa có giọng Quan thoại',''));
-  for(const voice of voices)select.add(new Option(`${voice.name} (${voice.lang})`,voiceKey(voice)));
-  select.value=voices.some(voice=>voiceKey(voice)===saved)?saved:'';
-  select.disabled=!voices.length;
-}
+const AUDIO_BASE=new URL('audio/',document.currentScript.src);
+const AUDIO_REV='1';
+const AUDIO_PATHS=new Map();
+words.forEach((word,i)=>{
+  const number=String(i+1).padStart(3,'0');
+  AUDIO_PATHS.set(word.hanzi,`w-${number}.mp3`);
+  AUDIO_PATHS.set(word.exZh,`e-${number}.mp3`);
+});
+let playingAudio=null,playingButton=null,playingLabel='';
 function resetPlayingButton(){
-  if(playingButton){if(playingButton.classList.contains('audio-icon'))delete playingButton.dataset.playing;else playingButton.textContent=playingLabel}
-  playingButton=null;playingLabel='';playingUtterance=null;
+  if(playingButton){
+    if(playingButton.classList.contains('audio-icon'))delete playingButton.dataset.playing;
+    else playingButton.textContent=playingLabel;
+  }
+  playingButton=null;playingLabel='';
 }
-function stopSpeech(){if('speechSynthesis' in window)speechSynthesis.cancel();resetPlayingButton()}
-function speak(t,slow=false,button=null){
-  if(!('speechSynthesis' in window))return msg('Trình duyệt chưa hỗ trợ phát âm.');
-  const voices=mandarinVoices(),saved=localStorage.getItem(VOICE_STORE),voice=voices.find(v=>voiceKey(v)===saved)||voices[0];
-  if(!voice)return msg('Chưa có giọng Quan thoại. Hãy cài giọng tiếng Trung (Trung Quốc) trên thiết bị rồi tải lại trang.');
+function stopSpeech(){
+  if(playingAudio){playingAudio.pause();playingAudio=null}
+  resetPlayingButton();
+}
+function finishAudio(audio){
+  if(playingAudio!==audio)return;
+  playingAudio=null;
+  resetPlayingButton();
+}
+function speak(text,slow=false,button=null){
+  const file=AUDIO_PATHS.get(text);
+  if(!file)return msg('Chưa có âm thanh cho từ này. Hãy cập nhật bộ âm thanh.');
   stopSpeech();
-  const utterance=new SpeechSynthesisUtterance(t);
-  utterance.voice=voice;utterance.lang=voice.lang;utterance.rate=slow?.75:1;
-  playingUtterance=utterance;
-  if(button){playingButton=button;playingLabel=button.textContent;if(button.classList.contains('audio-icon'))button.dataset.playing='true';else button.textContent='Đang phát…'}
-  utterance.onend=()=>{if(playingUtterance===utterance)resetPlayingButton()};
-  utterance.onerror=event=>{if(playingUtterance===utterance){resetPlayingButton();if(event.error!=='interrupted'&&event.error!=='canceled')msg('Không thể phát âm bằng giọng đã chọn. Hãy thử giọng khác.')}};
-  speechSynthesis.speak(utterance);
+  const audio=new Audio(new URL(`${file}?v=${AUDIO_REV}`,AUDIO_BASE).href);
+  audio.playbackRate=slow?.8:1;
+  audio.preservesPitch=true;
+  playingAudio=audio;
+  if(button){
+    playingButton=button;playingLabel=button.textContent;
+    if(button.classList.contains('audio-icon'))button.dataset.playing='true';
+    else button.textContent='Đang tải…';
+  }
+  audio.onplaying=()=>{if(playingAudio===audio&&playingButton&&!playingButton.classList.contains('audio-icon'))playingButton.textContent='Đang phát…'};
+  audio.onended=()=>finishAudio(audio);
+  audio.onerror=()=>{if(playingAudio===audio){finishAudio(audio);msg('Không tải được âm thanh. Hãy thử tải lại trang.')}};
+  audio.play().catch(()=>{if(playingAudio===audio){finishAudio(audio);msg('Không phát được âm thanh. Hãy nhấn lại nút loa.')}});
 }
 function msg(t){$('notice').textContent=t}function btn(t,fn,p){let b=document.createElement('button');b.textContent=t;b.onclick=fn;p.append(b);return b}
 function similarity(a,b){const clean=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z]/g,'');a=clean(a);b=clean(b);if(!a||!b)return 0;let r=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let p=r[0];r[0]=i;for(let j=1;j<=b.length;j++){let t=r[j];r[j]=Math.min(r[j]+1,r[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return 1-r[b.length]/Math.max(a.length,b.length)}
@@ -52,4 +58,4 @@ function practice(c){let pool=activeWords();index%=pool.length;let w=pool[index]
 function submitPractice(w){if(answered)return;let input=$('answer');if(!input.value.trim())return msg('Hãy nhập nghĩa trước khi trả lời.');let ok=isMeaningCorrect(input.value,w.meaning);input.dataset.answer=input.value;input.disabled=true;answered=true;log(w,ok);showAnswer($('feedback'),w,ok);let next=[...$('content').querySelectorAll('button')].find(b=>b.textContent.includes('Tiếp theo'));if(next)next.disabled=false;msg(ok?'Chính xác!':'Chưa chính xác. Hãy xem đáp án.')}function navButtonsPractice(c,n){let r=document.createElement('div');r.className='actions nav-actions';c.append(r);btn('← Trước',()=>{index=(index+n-1)%n;answered=false;render()},r);let b=btn('Tiếp theo →',()=>{if(!answered)return msg('Hãy trả lời câu này trước khi tiếp tục.');index=(index+1)%n;answered=false;render()},r);b.disabled=!answered}
 function exam(c){if(!quiz.length){let a=[...words].sort(()=>Math.random()-.5);quiz=[...a.slice(0,10).map(w=>({w,type:'Nghe'})),...a.slice(10,20).map(w=>({w,type:'Pinyin'}))];qpos=0;quizAnswered=Array(20).fill(false);quizCorrect=Array(20).fill(false)}if(qpos>=20){c.innerHTML=`<h2>Hoàn thành bài kiểm tra</h2><p>Đúng ${quizCorrect.filter(Boolean).length}/20 câu.</p><p>Nghe: ${quizCorrect.slice(0,10).filter(Boolean).length}/10 · Pinyin: ${quizCorrect.slice(10).filter(Boolean).length}/10</p>`;btn('Bài kiểm tra mới',()=>{quiz=[];render()},c);return}let {w,type}=quiz[qpos];c.innerHTML=`<div class="step-label">Câu ${qpos+1} / 20</div><div class="progress-track"><i style="width:${(qpos+1)*5}%"></i></div><small>CÂU ${qpos+1}/20 · ${type==='Nghe'?'NGHE':'NHẬN BIẾT PINYIN'}</small><h2>${type==='Nghe'?'Nghe và viết nghĩa':`Pinyin: ${w.pinyin}`}</h2>${type==='Nghe'?'<button class="audio-icon" type="button" aria-label="Nghe từ">🔊</button>':''}<input id="answer" placeholder="Nhập nghĩa tiếng Việt"><div id="feedback"></div>`;let input=$('answer');if(type==='Nghe')c.querySelector('.audio-icon').onclick=e=>speak(w.hanzi,false,e.currentTarget);let submit=()=>{if(quizAnswered[qpos])return;if(!input.value.trim())return msg('Hãy nhập nghĩa trước khi trả lời.');let ok=isMeaningCorrect(input.value,w.meaning);quizAnswered[qpos]=true;quizCorrect[qpos]=ok;log(w,ok);showAnswer($('feedback'),w,ok);msg(ok?'Chính xác!':'Chưa chính xác.');input.disabled=true;let next=[...$('content').querySelectorAll('button')].find(b=>b.textContent.includes('Câu tiếp theo'));if(next)next.disabled=false;};btn('Trả lời ↵',submit,c);let r=document.createElement('div');r.className='actions nav-actions';c.append(r);btn('← Câu trước',()=>{qpos=Math.max(0,qpos-1);render()},r);let next=btn('Câu tiếp theo →',()=>{if(!quizAnswered[qpos])return msg('Hãy trả lời trước khi chuyển câu.');qpos++;render()},r);next.disabled=!quizAnswered[qpos];if(quizAnswered[qpos]){input.disabled=true;showAnswer($('feedback'),w,quizCorrect[qpos])}}
 document.addEventListener('keydown',e=>{if(tab==='Kiểm tra'&&e.key==='Enter'){e.preventDefault();if(!quizAnswered[qpos])[...$('content').querySelectorAll('button')].find(b=>b.textContent.includes('Trả lời'))?.click();else if(qpos<19){qpos++;render()}return}if(tab==='Luyện tập'&&e.key==='Enter'){e.preventDefault();if(!answered)submitPractice(activeWords()[index%activeWords().length]);return}if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&e.target instanceof HTMLInputElement&&!e.target.disabled)return;if(e.key==='ArrowRight'){let b=[...$('content').querySelectorAll('button')].find(x=>x.textContent.includes('Tiếp theo'));if(b&&!b.disabled)b.click()}if(e.key==='ArrowLeft'){let b=[...$('content').querySelectorAll('button')].find(x=>x.textContent.includes('←'));if(b)b.click()}});
-$('export-progress').onclick=()=>download('hsk-tien-do.json',state);$('import-progress').onchange=async e=>{try{let s=JSON.parse(await e.target.files[0].text());if(s?.records&&s.days){state=s;save();render();msg('Đã nhập tiến độ.')}else throw Error()}catch{msg('Tệp tiến độ không hợp lệ.')}};function download(n,d){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}let theme=localStorage.getItem('hsk-theme')||'light';document.body.dataset.theme=theme;let toggle=document.createElement('button');toggle.textContent=theme==='light'?'☾':'☀';toggle.className='theme';toggle.setAttribute('aria-label',theme==='light'?'Bật giao diện tối':'Bật giao diện sáng');toggle.onclick=()=>{theme=theme==='light'?'dark':'light';document.body.dataset.theme=theme;toggle.textContent=theme==='light'?'☾':'☀';toggle.setAttribute('aria-label',theme==='light'?'Bật giao diện tối':'Bật giao diện sáng');localStorage.setItem('hsk-theme',theme)};document.querySelector('header').append(toggle);$('voice-select').onchange=e=>{if(e.target.value)localStorage.setItem(VOICE_STORE,e.target.value);else localStorage.removeItem(VOICE_STORE);msg('Đã lưu giọng đọc. Bấm nút loa để nghe thử.')};if('speechSynthesis' in window)speechSynthesis.addEventListener('voiceschanged',refreshVoices);refreshVoices();render();
+$('export-progress').onclick=()=>download('hsk-tien-do.json',state);$('import-progress').onchange=async e=>{try{let s=JSON.parse(await e.target.files[0].text());if(s?.records&&s.days){state=s;save();render();msg('Đã nhập tiến độ.')}else throw Error()}catch{msg('Tệp tiến độ không hợp lệ.')}};function download(n,d){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}let theme=localStorage.getItem('hsk-theme')||'light';document.body.dataset.theme=theme;let toggle=document.createElement('button');toggle.textContent=theme==='light'?'☾':'☀';toggle.className='theme';toggle.setAttribute('aria-label',theme==='light'?'Bật giao diện tối':'Bật giao diện sáng');toggle.onclick=()=>{theme=theme==='light'?'dark':'light';document.body.dataset.theme=theme;toggle.textContent=theme==='light'?'☾':'☀';toggle.setAttribute('aria-label',theme==='light'?'Bật giao diện tối':'Bật giao diện sáng');localStorage.setItem('hsk-theme',theme)};document.querySelector('header').append(toggle);render();
