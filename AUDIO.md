@@ -13,3 +13,24 @@ Nguồn giọng: [Kokoro-82M-v1.1-zh](https://huggingface.co/hexgrad/Kokoro-82M-
 - [`config.json`](https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh/raw/main/config.json)
 
 Chạy `python scripts/generate_audio.py --model-dir /đường/dẫn/đến/mô-hình --voice zf_002 --speed 0.9 --output-dir audio-c` cho giọng C, rồi chạy lại với `--voice zm_010 --output-dir audio-d` cho giọng D. Nếu sửa một mục, xóa MP3 tương ứng trong cả hai thư mục trước khi tạo lại. Nếu thay đổi thứ tự danh sách, xóa toàn bộ MP3 trong hai thư mục vì tên tệp phụ thuộc vào vị trí. Kiểm tra đủ 636 tệp trong mỗi thư mục trước khi xuất bản.
+
+## Phương án Azure Speech
+
+`scripts/generate_azure_audio.py` tạo bộ MP3 riêng bằng [Azure AI Speech REST API](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/rest-text-to-speech). Từ vựng dùng cách đọc SAPI dựa trên pinyin trong sheet, theo [bảng âm vị tiếng Trung của Azure](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-ssml-phonetic-sets#pinyin-initials-for-zh-cn). Câu ví dụ được gửi dưới dạng Trung văn có ngữ cảnh. Script không tải âm thanh hay dùng API nội bộ của OnHSK.
+
+Chạy thử phần kiểm tra dữ liệu mà không cần khóa API:
+
+```sh
+pip install pypinyin
+python scripts/generate_azure_audio.py --dry-run
+python scripts/generate_azure_audio.py --dry-run --indices 46,47
+```
+
+Để tạo âm thanh, đặt `AZURE_SPEECH_KEY` và `AZURE_SPEECH_REGION` trong môi trường riêng, rồi chạy:
+
+```sh
+python scripts/generate_azure_audio.py --voice zh-CN-XiaoxiaoNeural --output-dir audio-azure-c
+python scripts/generate_azure_audio.py --voice zh-CN-YunxiNeural --output-dir audio-azure-d
+```
+
+Hai lệnh trên tạo 636 file cho mỗi giọng. Có thể dùng `--indices 46,47 --words-only` để nghe thử hai từ 字 và 听 trước. Năm từ có âm `儿` nối đuôi không thể khóa pinyin bằng quy tắc tự động hiện tại; script nêu rõ chúng trong kết quả kiểm tra để nghe và chỉnh riêng. Chỉ đưa bộ Azure lên website sau khi nghe rà soát từ đơn, câu ví dụ và xác nhận điều khoản sử dụng âm thanh. Khóa API chỉ dùng lúc tạo file, không đặt trong JavaScript của website.
