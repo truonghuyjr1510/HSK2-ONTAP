@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nghe thử phát âm từ đơn · Ôn HSK</title>
+  <style>
+    :root{color-scheme:dark;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:#151428;color:#f8f6ff}
+    *{box-sizing:border-box}body{max-width:850px;margin:0 auto;padding:24px 18px 60px}
+    a{color:#cbbcff}.back{display:inline-block;margin-bottom:22px;text-decoration:none;font-weight:700}
+    h1{font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0 0 12px}p{color:#c3bcdb;margin:0 0 16px}
+    .controls{display:flex;align-items:center;gap:10px;margin:24px 0}
+    select,button{font:inherit;color:inherit;border:1px solid #504967;border-radius:11px;background:#29253e;min-height:45px;padding:9px 13px}
+    button{cursor:pointer;font-weight:700}button:hover,button[data-playing="true"]{border-color:#b59bff;background:#463a70}
+    button:focus-visible,select:focus-visible{outline:3px solid #b59bff;outline-offset:2px}
+    .word{border:1px solid #45405f;border-radius:20px;background:#211e35;padding:23px;margin:20px 0}
+    .heading{display:flex;align-items:baseline;gap:15px;flex-wrap:wrap;margin-bottom:7px}.hanzi{font-size:48px;font-weight:700;line-height:1.2}.pinyin{font-size:26px;color:#c0a9ff;font-weight:700}
+    .meaning{margin-bottom:16px}.example{margin:0 0 18px;color:#e5defc}
+    .voice{border-top:1px solid #45405f;padding:16px 0 3px}.voice h2{font-size:16px;margin:0 0 10px}
+    .buttons{display:flex;gap:9px;flex-wrap:wrap}.buttons button{flex:1 1 170px}
+    .buttons button.trial{border-color:#ad8dff;background:#5c45a2}
+    .note{font-size:14px}.status{min-height:24px;color:#cbbcff}
+    @media(max-width:420px){.word{padding:16px}.buttons button{flex-basis:100%}}
+  </style>
+</head>
+<body>
+  <a class="back" href="../hsk2review/">← Quay lại app</a>
+  <h1>Nghe thử cách đọc từ đơn</h1>
+  <p>Mỗi từ có bản đang dùng và bản thử lấy từ câu ví dụ, cho cả giọng C và D. Hãy nghe cùng một giọng để so sánh.</p>
+  <div class="controls"><label for="speed">Tốc độ nghe</label><select id="speed"><option value="1">Bình thường</option><option value="0.82">Chậm</option></select></div>
+
+  <section class="word" aria-labelledby="zi-title">
+    <div class="heading" id="zi-title"><span class="hanzi">字</span><span class="pinyin">zì</span></div>
+    <p class="meaning">Nghĩa: chữ, ký tự</p>
+    <p class="example">这个字怎么读？ · zhè ge zì zěn me dú? · Chữ này đọc thế nào?</p>
+    <div class="voice"><h2>Giọng C · nữ</h2><div class="buttons">
+      <button data-src="../audio-c/w-046.mp3">▶ Bản đang dùng</button>
+      <button class="trial" data-src="clips/c-046.mp3">▶ Bản thử từ ví dụ</button>
+      <button data-src="../audio-c/e-046.mp3">▶ Cả câu ví dụ</button>
+    </div></div>
+    <div class="voice"><h2>Giọng D · nam</h2><div class="buttons">
+      <button data-src="../audio-d/w-046.mp3">▶ Bản đang dùng</button>
+      <button class="trial" data-src="clips/d-046.mp3">▶ Bản thử từ ví dụ</button>
+      <button data-src="../audio-d/e-046.mp3">▶ Cả câu ví dụ</button>
+    </div></div>
+  </section>
+
+  <section class="word" aria-labelledby="ting-title">
+    <div class="heading" id="ting-title"><span class="hanzi">听</span><span class="pinyin">tīng</span></div>
+    <p class="meaning">Nghĩa: nghe</p>
+    <p class="example">我喜欢听音乐。 · wǒ xǐ huān tīng yīn yuè. · Tôi thích nghe nhạc.</p>
+    <div class="voice"><h2>Giọng C · nữ</h2><div class="buttons">
+      <button data-src="../audio-c/w-047.mp3">▶ Bản đang dùng</button>
+      <button class="trial" data-src="clips/c-047.mp3">▶ Bản thử từ ví dụ</button>
+      <button data-src="../audio-c/e-047.mp3">▶ Cả câu ví dụ</button>
+    </div></div>
+    <div class="voice"><h2>Giọng D · nam</h2><div class="buttons">
+      <button data-src="../audio-d/w-047.mp3">▶ Bản đang dùng</button>
+      <button class="trial" data-src="clips/d-047.mp3">▶ Bản thử từ ví dụ</button>
+      <button data-src="../audio-d/e-047.mp3">▶ Cả câu ví dụ</button>
+    </div></div>
+  </section>
+
+  <p class="note">Đây là bản nghe thử. Âm thanh trong các bài học vẫn dùng bộ hiện tại cho tới khi bản thử được kiểm tra.</p>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <script>
+    let currentAudio=null,currentButton=null;
+    const status=document.getElementById('status');
+    function stopAudio(){if(currentAudio){currentAudio.pause();currentAudio=null}if(currentButton){currentButton.dataset.playing='false';currentButton=null}}
+    for(const button of document.querySelectorAll('button[data-src]')){
+      button.addEventListener('click',()=>{
+        stopAudio();
+        const audio=new Audio(button.dataset.src);
+        audio.playbackRate=Number(document.getElementById('speed').value);
+        currentAudio=audio;currentButton=button;button.dataset.playing='true';status.textContent='Đang phát âm thanh…';
+        audio.onended=()=>{if(currentAudio===audio){stopAudio();status.textContent='Đã phát xong.'}};
+        audio.onerror=()=>{if(currentAudio===audio){stopAudio();status.textContent='Không tải được âm thanh. Hãy thử tải lại trang.'}};
+        audio.play().catch(()=>{if(currentAudio===audio){stopAudio();status.textContent='Không phát được âm thanh. Hãy nhấn lại nút nghe.'}});
+      });
+    }
+  </script>
+</body>
+</html>
