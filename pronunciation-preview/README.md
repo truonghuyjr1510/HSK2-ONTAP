@@ -10,3 +10,5 @@ These are short, manually selected crops of the existing example audio, not thir
 | `clips/d-047.mp3` (听) | `audio-d/e-047.mp3` | 0.91–1.21 |
 
 Each crop has a short fade at both edges and leading/trailing silence. Review the sound by ear before adopting this technique across the vocabulary; syllable boundaries in other examples may be less clear.
+
+The `*-v2.mp3` clips use the same crop windows, repeat each word twice, add about 8 dB of gain, and encode at 24 kHz/96 kbps to match the site's usual playback format. The preview page uses these files and keeps the original crops for comparison/history.
