@@ -5,6 +5,10 @@
 .audio-icon[data-playing="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 .voice-control{display:flex;align-items:center;gap:9px;margin-left:auto;color:var(--muted);font-size:13px;font-weight:650;white-space:nowrap}
 .voice-control select{min-height:44px;max-width:165px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);cursor:pointer}
+.toolbar button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:8px 13px;font-size:13px;font-weight:700;white-space:nowrap}
+.toolbar .shuffle-button{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-dark)}
+.toolbar button:hover{border-color:var(--accent);color:var(--accent-dark)}
 .topbar .theme{margin-left:0;flex:none}
 @media(max-width:1000px){.top-note{display:none}}
 @media(max-width:680px){.topbar{height:auto;min-height:68px;flex-wrap:wrap;row-gap:9px;padding:11px 15px}.brand{margin-right:auto}.topbar .theme{order:2}.voice-control{order:3;width:100%;justify-content:space-between;margin-left:0}.voice-control select{width:155px;max-width:50%}}
+@media(max-width:680px){.toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar label{grid-column:1/-1}.toolbar button{width:100%}.toolbar .shuffle-button:last-child{grid-column:1/-1}}
