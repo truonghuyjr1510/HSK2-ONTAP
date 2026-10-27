@@ -74,13 +74,24 @@ function editDistance(a,b){
   }
   return row[b.length];
 }
+function matchesMeaning(guess,answer){
+  const typoAllowance=answer.length>=11?2:answer.length>=4?1:0;
+  return Math.abs(guess.length-answer.length)<=typoAllowance&&editDistance(guess,answer)<=typoAllowance;
+}
 function isMeaningCorrect(input,meaning){
   const guesses=meaningOptions(input).map(cleanMeaning).filter(Boolean);
   const answers=meaningOptions(meaning).map(cleanMeaning).filter(Boolean);
-  return guesses.some(guess=>answers.some(answer=>{
-    const typoAllowance=answer.length>=11?2:answer.length>=4?1:0;
-    return Math.abs(guess.length-answer.length)<=typoAllowance&&editDistance(guess,answer)<=typoAllowance;
-  }));
+  if(guesses.some(guess=>answers.some(answer=>matchesMeaning(guess,answer))))return true;
+  if(answers.length<2)return false;
+  const combinedGuess=cleanMeaning(input);
+  function checkCombination(text,used,count){
+    if(count>=2&&matchesMeaning(combinedGuess,text))return true;
+    for(let i=0;i<answers.length;i++){
+      if(!(used&(1<<i))&&checkCombination(text+answers[i],used|(1<<i),count+1))return true;
+    }
+    return false;
+  }
+  return checkCombination('',0,0);
 }
 function example(w){return w.exPin}function reveal(w,ok){return `<b class="feedback ${ok?'correct':'wrong'}">${ok?'✓ Chính xác!':'✗ Chưa chính xác'}</b><p>${w.hanzi} · ${w.pinyin} · ${w.meaning}</p><p>Ví dụ: ${w.exZh}<br>Pinyin: ${w.exPin}<br>Nghĩa: ${w.exVi}</p>`}
 function showAnswer(el,w,ok){el.innerHTML=reveal(w,ok);let p=el.querySelector('p');if(p){let b=document.createElement('button');b.type='button';b.className='answer-audio';b.textContent='🔊 Nghe từ';b.onclick=e=>speak(w.hanzi,false,e.currentTarget);p.append(' ',b)}let sentence=el.querySelectorAll('p')[1];if(sentence){let b=document.createElement('button');b.type='button';b.className='answer-audio';b.textContent='🔊 Nghe ví dụ';b.onclick=()=>speak(w.exZh,false,b);sentence.append(' ',b)}}
